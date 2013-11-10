@@ -19,6 +19,17 @@ public abstract class Article extends MaterialBlock{
     }
 
     public void refreshArticleLines() {
+        LineCompacter compacter = new LineCompacter(DPGenGUI.lineSize);
+        Vector<String> newArticle = new Vector<String>();
+        for (String line : article) {
+            compacter.setLongLine(line);
+            compacter.compact();
+            newArticle.addAll(compacter.getLines());
+        }
+        article = newArticle;
+    }
+
+    public void trimArticle() {
         String text = DPGenGUI.getStringFromStringVector(article, false);
         LineCompacter compacter = new LineCompacter(DPGenGUI.lineSize);
         compacter.setLongLine(text);

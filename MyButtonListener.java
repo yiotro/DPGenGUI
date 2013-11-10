@@ -220,6 +220,11 @@ public class MyButtonListener implements ActionListener {
                 ((PictureBlock) genGUI.selectedBlock).picture = DPGenGUI.rotateImage(((PictureBlock) genGUI.selectedBlock).picture, 180);
                 genGUI.compose();
             }
+        } else if (command.equals("Схлопнуть абзац")) {
+            if (genGUI.selectedBlock instanceof Article) {
+                ((Article) genGUI.selectedBlock).trimArticle();
+                genGUI.compose();
+            }
         }
     }
 }

@@ -324,7 +324,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         JPanel editArticlePanel = new JPanel();
         editArticlePanel.setLayout(null);
         JLabel articleLabel = new JLabel("Текст абзаца");
-        articleLabel.setBounds(5, 5, 150, 20);
+        articleLabel.setBounds(5, 5, 120, 20);
         editArticlePanel.add(articleLabel);
         articleArea = new JTextArea("", lineSize, 5);
         articleArea.setLineWrap(true);
@@ -346,6 +346,10 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         changeArticleTextColor.setActionCommand("change article text color");
         changeArticleTextColor.setBounds(140, 365, 135, 25);
         editArticlePanel.add(changeArticleTextColor);
+        JButton trimArticleButton = new JButton("Схлопнуть абзац");
+        trimArticleButton.addActionListener(myButtonListener);
+        trimArticleButton.setBounds(150, 5, 125, 25);
+        editArticlePanel.add(trimArticleButton);
         mainCardPanel.add(editArticlePanel, "article");
 
         //edit title panel
