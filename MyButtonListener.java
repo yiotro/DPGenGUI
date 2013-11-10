@@ -1,10 +1,18 @@
+import sun.plugin.com.Utils;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -39,6 +47,8 @@ public class MyButtonListener implements ActionListener {
             PictureBlock pictureBlock = genGUI.elementFactory.createPictureBlock(bufferedImage, "");
             genGUI.addElement(pictureBlock);
             genGUI.elementList.setSelectedIndex(genGUI.materialBlocks.size() - 1);
+            genGUI.imageTextField.setText("Комментарий к картинке");
+            genGUI.imageTextField.selectAll();
         } else if (command.equals("Применить абзац")) {
             if (genGUI.selectedBlock == null) return;
             if (!(genGUI.selectedBlock instanceof Article)) return;
@@ -86,7 +96,7 @@ public class MyButtonListener implements ActionListener {
                 genGUI.imageOnEditLabel.setIcon(icon);
             } catch (Exception ignored) {}
         } else if (command.equals("Quit")) {
-            System.exit(0);
+            genGUI.askIfUserWantsToCloseProgram();
         } else if (command.equals("Сохранить")) {
             genGUI.savePost();
         } else if (command.equals("Загрузить")) {
@@ -178,6 +188,21 @@ public class MyButtonListener implements ActionListener {
             help.append("Особая благодарность моему другу faragilus за помощь :)\n");
             help.append("Мой e-mail: yiotro@hotmail.com");
             JOptionPane.showMessageDialog(genGUI, help.toString(), "Помощь", JOptionPane.DEFAULT_OPTION);
+        } else if (command.equals("Добавить картинку из папки")) {
+            JFileChooser chooser = new JFileChooser(".");
+            int returnVal = chooser.showOpenDialog(genGUI);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                try {
+                    BufferedImage image = ImageIO.read(chooser.getSelectedFile());
+                    if (image == null) return;
+                    genGUI.currentImage = image;
+                    image = (BufferedImage) DPGenGUI.getResizedImageByWidth(genGUI.currentImage, 300);
+                    ImageIcon icon = new ImageIcon(image);
+                    genGUI.imageOnEditLabel.setIcon(icon);
+                } catch (Exception ignored) {
+                    ignored.printStackTrace();
+                }
+            }
         }
     }
 }

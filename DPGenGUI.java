@@ -380,6 +380,10 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         applyImage.addActionListener(myButtonListener);
         applyImage.setBounds(5, 330, 270, 25);
         editImagePanel.add(applyImage);
+        JButton addImageFromFileButton = new JButton("Добавить картинку из папки");
+        addImageFromFileButton.addActionListener(myButtonListener);
+        addImageFromFileButton.setBounds(5, 360, 270, 25);
+        editImagePanel.add(addImageFromFileButton);
         mainCardPanel.add(editImagePanel, "picture");
 
         //menu bar
@@ -420,11 +424,12 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
 
         setBounds(50, 20, 1200, 700);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
 
     public static void setBackgroundColor(Color backgroundColor) {
         DPGenGUI.backgroundColor = backgroundColor;
+        DPGenGUI.singleGenGUI.signatureColor = backgroundColor.darker().darker();
     }
 
     public void setStyle(int style) {
@@ -522,8 +527,25 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         }
     }
 
+    public void askIfUserWantsToCloseProgram() {
+        Object[] options = {"Выйти", "Сохранить и выйти", "Отмена"};
+        int n = JOptionPane.showOptionDialog(singleGenGUI, "Выйти без сохранения?", "", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+        switch (n) {
+            case JOptionPane.YES_OPTION: System.exit(0); break;
+            case JOptionPane.NO_OPTION:
+                savePost();
+                System.exit(0);
+                break;
+        }
+    }
+
     public static void main(String args[]){
         singleGenGUI = new DPGenGUI("Генератор длиннопостов от yiotro ;)");
+        singleGenGUI.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent ev){
+                singleGenGUI.askIfUserWantsToCloseProgram();
+            }
+        });
     }
 
     public static DPGenGUI getSingleGenGUI() {
@@ -674,7 +696,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
             currentVerticalPos = materialBlock.show(graphics, currentVerticalPos);
         }
         //signature
-        graphics.setColor(backgroundColor.darker().darker());
+        graphics.setColor(signatureColor);
         graphics.setFont(textFont);
         currentVerticalPos += 10;
         int horizontalPosition;

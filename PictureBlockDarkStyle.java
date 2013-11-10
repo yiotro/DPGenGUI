@@ -12,7 +12,7 @@ public class PictureBlockDarkStyle extends PictureBlock{
 
     @Override
     int getHeight() {
-        return picture.getHeight(null) + 20;
+        return picture.getHeight(null) + 30;
     }
 
     PictureBlockDarkStyle(Image picture, String description) {
@@ -50,7 +50,7 @@ public class PictureBlockDarkStyle extends PictureBlock{
         for (int i=0; i<lines.size(); i++) {
             graphics2D.drawString(lines.get(i), DPGenGUI.width / 2 - blockWidth / 2 + 5, hPos + picture.getHeight(null) + 23 + 20 * i);
         }
-        return hPos + picture.getHeight(null) + 40 + 20 * lines.size();
+        return hPos + picture.getHeight(null) + 50 + 20 * lines.size();
     }
 
     @Override

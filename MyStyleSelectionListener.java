@@ -21,7 +21,7 @@ public class MyStyleSelectionListener implements ListSelectionListener, ActionLi
             if (index < 0) return;
             int sure = JOptionPane.OK_OPTION;
             if (!showedConfirmDialogOnce) {
-                JOptionPane.showConfirmDialog(genGUI.styleSelectionList, "Выбранный стиль подействует на все элементы поста. Продолжить?", "Выбор стиля", JOptionPane.OK_CANCEL_OPTION);
+                JOptionPane.showConfirmDialog(genGUI, "Выбранный стиль подействует на все элементы поста. Продолжить?", "Выбор стиля", JOptionPane.OK_CANCEL_OPTION);
                 showedConfirmDialogOnce = true;
             }
             if (sure != JOptionPane.OK_OPTION) {
