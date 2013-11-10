@@ -10,5 +10,6 @@ public abstract class PictureBlock extends MaterialBlock {
         super(DPGenGUI.style);
         this.picture = picture;
         this.description = description;
+        blockWidth = picture.getWidth(null);
     }
 }

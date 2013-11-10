@@ -6,7 +6,7 @@ public class PictureBlockPicturesOnly extends PictureBlock{
         super(picture, description);
         blockWidth = DPGenGUI.width;
         int resizedImageWidth = blockWidth;
-        this.picture = DPGenGUI.getResizedImageByWidth(picture, resizedImageWidth);
+        this.picture = DPGenGUI.getResizedImageByWidth(picture, resizedImageWidth, true);
         this.description = description;
         pictureHeight = picture.getHeight(null);
         style = ElementFactory.STYLE_PICTURES_ONLY;

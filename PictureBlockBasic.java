@@ -5,8 +5,7 @@ public class PictureBlockBasic extends PictureBlock{
 
     public PictureBlockBasic(Image picture, String description) {
         super(picture, description);
-        blockWidth = DPGenGUI.width - 40;
-        int resizedImageWidth = blockWidth;
+        int resizedImageWidth = DPGenGUI.width - 40;
         this.picture = DPGenGUI.getResizedImageByWidth(picture, resizedImageWidth);
         this.description = description;
         pictureHeight = picture.getHeight(null);
@@ -16,6 +15,7 @@ public class PictureBlockBasic extends PictureBlock{
     @Override
     int show(Graphics2D graphics2D, int hPos) {
         this.hPos = hPos;
+        blockWidth = this.picture.getWidth(null);
         hPos += 5;
         graphics2D.drawImage(picture, DPGenGUI.width / 2 - blockWidth / 2, hPos - 30, null);
         graphics2D.setColor(DPGenGUI.textColor);

@@ -14,8 +14,7 @@ public class PictureBlockOriginal extends PictureBlock {
         compacter.setLongLine(description);
         compacter.compact();
         lines = compacter.getLines();
-        blockWidth = DPGenGUI.width - 100;
-        int resizedImageWidth = blockWidth;
+        int resizedImageWidth = DPGenGUI.width - 100;
         this.picture = DPGenGUI.getResizedImageByWidth(picture, resizedImageWidth);
         this.description = description;
         commentHeight = 10 + 20 * lines.size();
@@ -40,6 +39,7 @@ public class PictureBlockOriginal extends PictureBlock {
     @Override
     public int show(Graphics2D graphics2D, int hPos) {
         this.hPos = hPos;
+        blockWidth = picture.getWidth(null);
         hPos += 5;
         Random random = new Random();
         graphics2D.setColor(Color.BLACK);

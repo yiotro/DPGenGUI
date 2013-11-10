@@ -978,7 +978,9 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         return copy;
     }
 
-    public static Image getResizedImage(Image image, int wantedWidth, int wantedHeight) {
+    public static Image getResizedImage(Image image, int wantedWidth, int wantedHeight, boolean forceScale) {
+        //this method restricts scaling up the picture if forceScale == true
+        if (!forceScale && (wantedWidth > image.getWidth(null) || wantedHeight > image.getHeight(null))) return image;
         BufferedImage resizedImage = new BufferedImage(wantedWidth, wantedWidth, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = resizedImage.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -992,16 +994,28 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         return resizedImage;
     }
 
+    public static Image getResizedImage(Image image, int wantedWidth, int wantedHeight) {
+        return getResizedImage(image, wantedWidth, wantedHeight, false);
+    }
+
     public static Image getResizedImageByWidth(Image image, int wantedWidth) {
+        return getResizedImageByWidth(image, wantedWidth, false);
+    }
+
+    public static Image getResizedImageByWidth(Image image, int wantedWidth, boolean forceScale) {
         double k = ((double) image.getHeight(null)) / ((double) image.getWidth(null));
         int wantedHeight = (int) (k * wantedWidth);
-        return getResizedImage(image, wantedWidth, wantedHeight);
+        return getResizedImage(image, wantedWidth, wantedHeight, forceScale);
     }
 
     public static Image getResizedImageByHeight(Image image, int wantedHeight) {
+        return getResizedImageByHeight(image, wantedHeight, false);
+    }
+
+    public static Image getResizedImageByHeight(Image image, int wantedHeight, boolean forceScale) {
         double k = ((double) image.getWidth(null)) / ((double) image.getHeight(null));
         int wantedWidth = (int) (k * wantedHeight);
-        return getResizedImage(image, wantedWidth, wantedHeight);
+        return getResizedImage(image, wantedWidth, wantedHeight, forceScale);
     }
 
     @Override

@@ -207,17 +207,20 @@ public class MyButtonListener implements ActionListener {
             }
         } else if (command.equals("По часовой")) {
             if (genGUI.selectedBlock instanceof PictureBlock) {
-                ((PictureBlock) genGUI.selectedBlock).picture = DPGenGUI.rotateImage(((PictureBlock) genGUI.selectedBlock).picture, 270);
+                ((PictureBlock) genGUI.selectedBlock).picture = DPGenGUI.rotateImage(((PictureBlock) genGUI.selectedBlock).picture, 90);
+                genGUI.selectedBlock.refreshHeight();
                 genGUI.compose();
             }
         } else if (command.equals("Против часовой")) {
             if (genGUI.selectedBlock instanceof PictureBlock) {
-                ((PictureBlock) genGUI.selectedBlock).picture = DPGenGUI.rotateImage(((PictureBlock) genGUI.selectedBlock).picture, 90);
+                ((PictureBlock) genGUI.selectedBlock).picture = DPGenGUI.rotateImage(((PictureBlock) genGUI.selectedBlock).picture, 270);
+                genGUI.selectedBlock.refreshHeight();
                 genGUI.compose();
             }
         } else if (command.equals("Вверх ногами")) {
             if (genGUI.selectedBlock instanceof PictureBlock) {
                 ((PictureBlock) genGUI.selectedBlock).picture = DPGenGUI.rotateImage(((PictureBlock) genGUI.selectedBlock).picture, 180);
+                genGUI.selectedBlock.refreshHeight();
                 genGUI.compose();
             }
         } else if (command.equals("Схлопнуть абзац")) {

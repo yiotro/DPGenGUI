@@ -3,7 +3,7 @@ import java.awt.image.BufferedImage;
 import java.util.Vector;
 
 public class PictureBlockDarkStyle extends PictureBlock{
-    public static final int MINIMUM_PICTURE_WIDTH = 400;
+    public static final int MINIMUM_PICTURE_WIDTH = 200;
     Vector<String> lines;
 
     PictureBlockDarkStyle() {
