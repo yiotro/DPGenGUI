@@ -188,6 +188,7 @@ class MyButtonListener implements ActionListener {
             help.append("но по ним легко понять, что они делают.\n");
             help.append("Надо заметить, что на элементы поста можно кликать правой\n");
             help.append("кнопкой мыши.\n");
+            help.append("Хочу сказать спасибо пользователю Hexen за помощь\n");
             help.append("Особая благодарность моему другу faragilus за помощь :)\n");
             help.append("Мой e-mail: yiotro@hotmail.com");
             JOptionPane.showMessageDialog(genGUI, help.toString(), "Помощь", JOptionPane.INFORMATION_MESSAGE);
@@ -246,7 +247,7 @@ class MyButtonListener implements ActionListener {
                 fontNames[i] = f.getName();
                 i++;
             }
-            String s = (String) JOptionPane.showInputDialog(genGUI, "Выберите шрифт", "Выбор шрифта из списка", JOptionPane.PLAIN_MESSAGE, null, fontNames, "Arial");
+            String s = (String) JOptionPane.showInputDialog(genGUI, "Выберите шрифт", "Выбор шрифта из списка", JOptionPane.PLAIN_MESSAGE, null, fontNames, DPGenGUI.textFont.getName());
             if ((s != null) && (s.length() > 0)) {
                 genGUI.setLoadedFont(new Font(s, Font.PLAIN, 16));
             }

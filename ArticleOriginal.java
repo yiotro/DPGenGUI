@@ -18,6 +18,7 @@ class ArticleOriginal extends Article{
     public int show(Graphics2D graphics2D, int hPos) {
         this.hPos = hPos;
         graphics2D.setColor(backgroundColor);
+        graphics2D.setStroke(new BasicStroke(2));
         graphics2D.fillRect(10, hPos - 20, DPGenGUI.width - 20, article.size() * 24 + 5);
         if (bordered) {
             graphics2D.setColor(Color.BLACK);

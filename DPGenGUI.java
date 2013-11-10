@@ -682,7 +682,8 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         dst.thematicColor = new Color(src.thematicColor.getRGB());
         dst.textFont = new Font(src.textFont.getName(), src.textFont.getStyle(), src.textFont.getSize());
         dst.style = src.style;
-        dst.sign = new Vector<String>(src.sign);
+        dst.sign = new Vector<String>();
+        for (String line : src.sign) dst.sign.add(line);
     }
 
     void savePost() {
@@ -707,10 +708,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
             }
             return;
         }
-        JFileChooser chooser = new JFileChooser(".");
-        FileFilter type1 = new FileNameExtensionFilter("Pikabu post", ".dat");
-        chooser.setAcceptAllFileFilterUsed(false);
-        chooser.addChoosableFileFilter(type1);
+        JFileChooser chooser = new JFileChooser();
         int returnVal = chooser.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             try {
@@ -738,6 +736,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
                 ProjectInformation projectInformation = (ProjectInformation) stream.readObject();
                 clearPost(true);
                 setProjectByProjectInformation(projectInformation);
+                madeChange = false;
             } catch (Exception e) {
                 System.out.println(e.getLocalizedMessage() + "\n");
                 e.printStackTrace();

@@ -10,13 +10,13 @@ class PictureBlockOriginal extends PictureBlock {
 
     PictureBlockOriginal(Image picture, String description) {
         super(picture, description);
-        LineCompacter compacter = new LineCompacter(DPGenGUI.pictureDescriptionLineSize);
-        compacter.setLongLine(description);
-        compacter.compact();
-        lines = compacter.getLines();
         int resizedImageWidth = DPGenGUI.width - 100;
         this.picture = DPGenGUI.getResizedImageByWidth(picture, resizedImageWidth);
         this.description = description;
+        LineCompacter compacter = new LineCompacter(DPGenGUI.howManySymbolsFitInWidth((int) (blockWidth / 2), DPGenGUI.commentFont) - 2);
+        compacter.setLongLine(description);
+        compacter.compact();
+        lines = compacter.getLines();
         commentHeight = 10 + 20 * lines.size();
         pictureHeight = picture.getHeight(null);
         style = ElementFactory.STYLE_ORIGINAL;
@@ -40,7 +40,7 @@ class PictureBlockOriginal extends PictureBlock {
     public int show(Graphics2D graphics2D, int hPos) {
         this.hPos = hPos;
         blockWidth = picture.getWidth(null);
-        hPos += 5;
+        hPos += 10;
         Random random = new Random();
         graphics2D.setColor(Color.BLACK);
         graphics2D.drawRect(DPGenGUI.width / 2 - blockWidth / 2 - 1, hPos - 30 - 1, picture.getWidth(null) + 1, picture.getHeight(null) + 1);
@@ -72,6 +72,7 @@ class PictureBlockOriginal extends PictureBlock {
                 graphics2D.drawString(lines.get(i), DPGenGUI.width / 2 - blockWidth / 2 + commentX + 10, hPos - 11 + commentY + 20 * i);
             }
         }
+        hPos -= 5;
         return hPos + picture.getHeight(null) + 20;
     }
 

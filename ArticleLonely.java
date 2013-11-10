@@ -13,6 +13,7 @@ class ArticleLonely extends Article{
     int show(Graphics2D graphics2D, int hPos) {
         this.hPos = hPos;
         graphics2D.setColor(backgroundColor);
+        graphics2D.setStroke(new BasicStroke(2));
         int fontHeight = 22;
         graphics2D.fillRect(10, hPos - 20, DPGenGUI.width - 20, article.size() * fontHeight + 5);
         if (bordered) {
