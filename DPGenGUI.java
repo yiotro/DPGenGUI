@@ -73,6 +73,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     JList styleSelectionList;
     JButton applyArticle;
     Vector<String> listOfStyles;
+    JMenu rotateMenu;
 
     DPGenGUI(String s){
         super(s);
@@ -230,6 +231,18 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
             selectStyleItem.add(item);
         }
         popupMenu.add(selectStyleItem);
+        rotateMenu = new JMenu("Повернуть");
+        Vector<String> rotateList = new Vector<String>();
+        rotateList.add("По часовой");
+        rotateList.add("Против часовой");
+        rotateList.add("Вверх ногами");
+        for (String rotateOption : rotateList) {
+            JMenuItem item = new JMenuItem(rotateOption);
+            item.setActionCommand(rotateOption);
+            item.addActionListener(myButtonListener);
+            rotateMenu.add(item);
+        }
+        popupMenu.add(rotateMenu);
 
         //main card panel
         mainCardPanel = new JPanel();
@@ -652,13 +665,14 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         if (selectedSomething && mouseEvent.getButton() == MouseEvent.BUTTON3) {
             popupBackColorItem.setEnabled(false);
             popupTextColorItem.setEnabled(false);
+            rotateMenu.setEnabled(false);
             if (selectedBlock instanceof Article) {
                 popupBackColorItem.setEnabled(true);
                 popupTextColorItem.setEnabled(true);
             } else if (selectedBlock instanceof Title) {
                 popupTextColorItem.setEnabled(true);
             } else if (selectedBlock instanceof PictureBlock) {
-                //nothing here, lol
+                rotateMenu.setEnabled(true);
             }
             popupMenu.show(imageLabel, mouseEvent.getX(), mouseEvent.getY());
         }
@@ -724,6 +738,20 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
 
         //this is not prevent crazy fucking shit glitch
         if (reselect) reselectBlock();
+    }
+
+    public static Image rotateImage(Image img, double angle){
+        double sin = Math.abs(Math.sin(Math.toRadians(angle))), cos = Math.abs(Math.cos(Math.toRadians(angle)));
+        int w = img.getWidth(null), h = img.getHeight(null);
+        int newW = (int) Math.floor(w * cos + h * sin), newH = (int) Math.floor(h
+                * cos + w * sin);
+        BufferedImage bImg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = bImg.createGraphics();
+        g.translate((newW - w) / 2, (newH - h) / 2);
+        g.rotate(Math.toRadians(angle), w / 2, h / 2);
+        g.drawRenderedImage((BufferedImage) img, null);
+        g.dispose();
+        return bImg;
     }
 
     public void clearSelection() {

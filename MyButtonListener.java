@@ -9,6 +9,8 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -202,6 +204,21 @@ public class MyButtonListener implements ActionListener {
                 } catch (Exception ignored) {
                     ignored.printStackTrace();
                 }
+            }
+        } else if (command.equals("По часовой")) {
+            if (genGUI.selectedBlock instanceof PictureBlock) {
+                ((PictureBlock) genGUI.selectedBlock).picture = DPGenGUI.rotateImage(((PictureBlock) genGUI.selectedBlock).picture, 270);
+                genGUI.compose();
+            }
+        } else if (command.equals("Против часовой")) {
+            if (genGUI.selectedBlock instanceof PictureBlock) {
+                ((PictureBlock) genGUI.selectedBlock).picture = DPGenGUI.rotateImage(((PictureBlock) genGUI.selectedBlock).picture, 90);
+                genGUI.compose();
+            }
+        } else if (command.equals("Вверх ногами")) {
+            if (genGUI.selectedBlock instanceof PictureBlock) {
+                ((PictureBlock) genGUI.selectedBlock).picture = DPGenGUI.rotateImage(((PictureBlock) genGUI.selectedBlock).picture, 180);
+                genGUI.compose();
             }
         }
     }
