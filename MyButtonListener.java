@@ -107,7 +107,7 @@ class MyButtonListener implements ActionListener {
         } else if (command.equals("Обновить пост")) {
             genGUI.compose();
         } else if (command.equals("Новый пост")) {
-            genGUI.clearPost();
+            genGUI.clearPost(true);
         } else if (command.equals("Удалить")) {
             genGUI.deleteSelectedBlock();
         } else if (command.equals("Выше")) {
@@ -158,7 +158,7 @@ class MyButtonListener implements ActionListener {
                 if (color != null) ((Title) genGUI.selectedBlock).textColor = color;
                 genGUI.compose(false);
             }
-        } else if (command.equals("Применить подпись")) {
+        } else if (command.equals("apply signature")) {
             String text = genGUI.signatureField.getText();
             LineCompacter compacter = new LineCompacter(DPGenGUI.lineSize - 10);
             compacter.setLongLine(text);
@@ -224,7 +224,7 @@ class MyButtonListener implements ActionListener {
                 genGUI.selectedBlock.refreshHeight();
                 genGUI.compose();
             }
-        } else if (command.equals("Схлопнуть абзац")) {
+        } else if (command.equals("trim article")) {
             if (genGUI.selectedBlock instanceof Article) {
                 ((Article) genGUI.selectedBlock).trimArticle();
                 genGUI.compose();
@@ -250,10 +250,17 @@ class MyButtonListener implements ActionListener {
             if ((s != null) && (s.length() > 0)) {
                 genGUI.setLoadedFont(new Font(s, Font.PLAIN, 16));
             }
-            genGUI.compose();
+            genGUI.compose(false);
         } else if (command.equals("load font")) {
             genGUI.loadFontFromFile();
-            genGUI.compose();
+            genGUI.compose(false);
+        } else if (command.equals("switch border")) {
+            if (genGUI.selectedBlock instanceof Article) {
+                ((Article) genGUI.selectedBlock).bordered = !((Article) genGUI.selectedBlock).bordered;
+                genGUI.compose();
+            }
+        } else if (command.equals("Отмена")) {
+            genGUI.undoAction();
         }
     }
 }

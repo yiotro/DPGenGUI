@@ -15,11 +15,13 @@ class ArticleDark extends Article{
         graphics2D.setColor(backgroundColor);
         graphics2D.fillRect(10, hPos - 20, DPGenGUI.width - 20, article.size() * 24 + 2);
 
-        Stroke lastStroke = graphics2D.getStroke();
-        graphics2D.setStroke(new BasicStroke(4));
-        graphics2D.setColor(Color.BLACK);
-        graphics2D.drawRect(8, hPos - 22, DPGenGUI.width - 16, article.size() * 24 + 6);
-        graphics2D.setStroke(lastStroke);
+        if (bordered) {
+            Stroke lastStroke = graphics2D.getStroke();
+            graphics2D.setStroke(new BasicStroke(4));
+            graphics2D.setColor(Color.BLACK);
+            graphics2D.drawRect(8, hPos - 22, DPGenGUI.width - 16, article.size() * 24 + 6);
+            graphics2D.setStroke(lastStroke);
+        }
 
         graphics2D.setFont(DPGenGUI.textFont);
         graphics2D.setColor(textColor);
