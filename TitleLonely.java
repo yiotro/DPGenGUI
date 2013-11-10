@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.util.Vector;
 
-public class TitleLonely extends Title{
+class TitleLonely extends Title{
 
     public TitleLonely(String header) {
         super(header);

@@ -2,9 +2,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Vector;
 
-public class PictureBlockDarkStyle extends PictureBlock{
-    public static final int MINIMUM_PICTURE_WIDTH = 200;
-    Vector<String> lines;
+class PictureBlockDarkStyle extends PictureBlock{
+    private static final int MINIMUM_PICTURE_WIDTH = 200;
+    private final Vector<String> lines;
 
     PictureBlockDarkStyle() {
         this(new BufferedImage(300, 300, BufferedImage.TYPE_INT_ARGB), " ");

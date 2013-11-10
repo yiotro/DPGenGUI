@@ -13,7 +13,7 @@ public abstract class MaterialBlock {
     public static final int ALIGN_CENTER = 1;
     public static final int ALIGN_RIGHT = 2;
 
-    protected MaterialBlock(int style) {
+    MaterialBlock(int style) {
         this.style = style;
         textAlign = ALIGN_LEFT;
     }
@@ -24,7 +24,7 @@ public abstract class MaterialBlock {
         show(graphics2D, hPos);
     }
 
-    public int getAlignedTextPosition(String textLine, int leftLimit, int rightLimit, Font font) {
+    int getAlignedTextPosition(String textLine, int leftLimit, int rightLimit, Font font) {
         BufferedImage temp = new BufferedImage(DPGenGUI.width, 1000, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics2D = (Graphics2D) temp.getGraphics();
         graphics2D.setFont(font);

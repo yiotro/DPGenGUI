@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class PictureBlockBasic extends PictureBlock{
+class PictureBlockBasic extends PictureBlock{
 
 
     public PictureBlockBasic(Image picture, String description) {

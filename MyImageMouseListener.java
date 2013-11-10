@@ -1,9 +1,9 @@
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class MyImageMouseListener implements MouseListener {
+class MyImageMouseListener implements MouseListener {
 
-    DPGenGUI genGUI;
+    private final DPGenGUI genGUI;
 
     MyImageMouseListener(DPGenGUI genGUI) {
         this.genGUI = genGUI;

@@ -1,9 +1,9 @@
 import java.awt.*;
 import java.util.Vector;
 
-public class PictureBlockLonely extends PictureBlock{
+class PictureBlockLonely extends PictureBlock{
 
-    int wholeHeight;
+    private int wholeHeight;
 
     public PictureBlockLonely(Image picture, String description) {
         super(picture, description);
@@ -15,7 +15,6 @@ public class PictureBlockLonely extends PictureBlock{
         this.hPos = hPos;
         hPos += 5;
         Font font = new Font("Arial", Font.PLAIN, 16);
-        FontMetrics metrics = graphics2D.getFontMetrics();
         int heightOfOneLine = font.getSize() + 4;
         int howManyLinesToBeUpper = 10;
         Image scaledPicture = DPGenGUI.getResizedImageByHeight(picture, howManyLinesToBeUpper * heightOfOneLine);
@@ -30,7 +29,7 @@ public class PictureBlockLonely extends PictureBlock{
         } else {
             upperText = new Vector<String>();
             for (int i=0; i<howManyLinesToBeUpper; i++) upperText.add(wholeText.get(i));
-            StringBuffer lowerBuffer = new StringBuffer();
+            StringBuilder lowerBuffer = new StringBuilder();
             for (int i=howManyLinesToBeUpper; i<wholeText.size(); i++) lowerBuffer.append(wholeText.get(i));
             LineCompacter lowerCompacter = new LineCompacter(7 + DPGenGUI.howManySymbolsFitInWidth(DPGenGUI.width - 20, font));
             lowerCompacter.setLongLine(lowerBuffer.toString());

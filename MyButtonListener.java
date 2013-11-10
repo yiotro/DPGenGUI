@@ -15,12 +15,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-public class MyButtonListener implements ActionListener {
+class MyButtonListener implements ActionListener {
 
-    DPGenGUI genGUI;
+    private final DPGenGUI genGUI;
 
     MyButtonListener(DPGenGUI frame) {
         this.genGUI = frame;
@@ -67,7 +68,7 @@ public class MyButtonListener implements ActionListener {
             ((Article) genGUI.selectedBlock).article = miniTexts;
             genGUI.selectedBlock.refreshHeight();
             genGUI.compose();
-        } else if (command.equals("Применить название")) {
+        } else if (command.equals("Применить имя")) {
             String name = genGUI.nameField.getText();
             if (name.length() > DPGenGUI.POST_NAME_MAX_SIZE) name = name.substring(0, DPGenGUI.POST_NAME_MAX_SIZE);
             genGUI.name = name;
@@ -168,7 +169,7 @@ public class MyButtonListener implements ActionListener {
             Color color = JColorChooser.showDialog(genGUI, "Цвет подписи", genGUI.signatureColor);
             if (color != null) genGUI.signatureColor = color;
             genGUI.compose(false);
-        } else if (command.equals("Задать размер текста")) {
+        } else if (command.equals("Размер текста")) {
             try {
                 int size = Integer.valueOf(genGUI.textSizeField.getText());
                 DPGenGUI.textFont = DPGenGUI.textFont.deriveFont((float) size);
@@ -176,11 +177,11 @@ public class MyButtonListener implements ActionListener {
                 genGUI.compose(false);
             } catch (Exception ignored) {}
         } else if (command.equals("Задать тематический цвет поста O_o")) {
-            Color color = JColorChooser.showDialog(genGUI, "Тематический цвет поста", genGUI.thematicColor);
+            Color color = JColorChooser.showDialog(genGUI, "Тематический цвет поста", DPGenGUI.thematicColor);
             if (color != null) genGUI.setThematicColor(color);
             genGUI.compose(false);
         } else if (command.equals("Помощь, епта")) {
-            StringBuffer help = new StringBuffer();
+            StringBuilder help = new StringBuilder();
             help.append("Привет, это прога для создания длиннопостов на пикабу.\n");
             help.append("Сделал ее я, yiotro.\n");
             help.append("В принципе прога довольно простая, кнопок хоть и много,\n");
@@ -189,7 +190,7 @@ public class MyButtonListener implements ActionListener {
             help.append("кнопкой мыши\n");
             help.append("Особая благодарность моему другу faragilus за помощь :)\n");
             help.append("Мой e-mail: yiotro@hotmail.com");
-            JOptionPane.showMessageDialog(genGUI, help.toString(), "Помощь", JOptionPane.DEFAULT_OPTION);
+            JOptionPane.showMessageDialog(genGUI, help.toString(), "Помощь", JOptionPane.INFORMATION_MESSAGE);
         } else if (command.equals("Добавить картинку из папки")) {
             JFileChooser chooser = new JFileChooser(".");
             int returnVal = chooser.showOpenDialog(genGUI);
@@ -236,6 +237,22 @@ public class MyButtonListener implements ActionListener {
             genGUI.compose();
         } else if (command.equals("align text right")) {
             genGUI.selectedBlock.setTextAlign(MaterialBlock.ALIGN_RIGHT);
+            genGUI.compose();
+        } else if (command.equals("choose font")) {
+            Font[] allFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+            Object[] fontNames = new Object[allFonts.length];
+            int i = 0;
+            for (Font f : allFonts) {
+                fontNames[i] = f.getName();
+                i++;
+            }
+            String s = (String) JOptionPane.showInputDialog(genGUI, "Выберите шрифт", "Выбор шрифта из списка", JOptionPane.PLAIN_MESSAGE, null, fontNames, "Arial");
+            if ((s != null) && (s.length() > 0)) {
+                genGUI.setLoadedFont(new Font(s, Font.PLAIN, 16));
+            }
+            genGUI.compose();
+        } else if (command.equals("load font")) {
+            genGUI.loadFontFromFile();
             genGUI.compose();
         }
     }

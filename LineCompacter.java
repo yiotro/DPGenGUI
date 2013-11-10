@@ -1,10 +1,10 @@
 import java.util.Vector;
 
-public class LineCompacter {
+class LineCompacter {
 
-    Vector<String> lines;
-    int lineSize;
-    String longLine;
+    private final Vector<String> lines;
+    private int lineSize;
+    private String longLine;
 
     public LineCompacter(int lineSize) {
         this.lineSize = lineSize;

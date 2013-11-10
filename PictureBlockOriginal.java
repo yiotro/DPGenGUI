@@ -2,11 +2,11 @@ import java.awt.*;
 import java.util.Random;
 import java.util.Vector;
 
-public class PictureBlockOriginal extends PictureBlock {
-    int commentX;
-    int commentY;
-    int commentHeight;
-    Vector<String> lines;
+class PictureBlockOriginal extends PictureBlock {
+    private final int commentX;
+    private final int commentY;
+    private final int commentHeight;
+    private final Vector<String> lines;
 
     PictureBlockOriginal(Image picture, String description) {
         super(picture, description);

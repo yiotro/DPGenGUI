@@ -5,7 +5,7 @@ public abstract class Title extends MaterialBlock {
     int height;
     Color textColor;
 
-    protected Title(String header) {
+    Title(String header) {
         super(DPGenGUI.style);
         this.header = header;
         textColor = DPGenGUI.textColor;

@@ -8,7 +8,7 @@ public abstract class Article extends MaterialBlock{
     Color textColor;
     boolean bordered;
 
-    protected Article(Vector<String> article) {
+    Article(Vector<String> article) {
         super(DPGenGUI.style);
         this.article = article;
         for (int i=0; i<article.size(); i++)

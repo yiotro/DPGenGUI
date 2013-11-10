@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.util.Vector;
 
-public class ArticleBasic extends Article{
+class ArticleBasic extends Article{
 
     public ArticleBasic(Vector<String> article) {
         super(article);

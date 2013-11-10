@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.util.Vector;
 
-public class ArticleOriginal extends Article{
+class ArticleOriginal extends Article{
 
     ArticleOriginal(Vector<String> article) {
         super(article);
@@ -24,13 +24,13 @@ public class ArticleOriginal extends Article{
             graphics2D.drawRect(10, hPos - 20, DPGenGUI.width - 20, article.size() * 24 + 5);
         }
         graphics2D.setColor(DPGenGUI.pictureBoundColor);
-        graphics2D.setFont(DPGenGUI.textFont);
         graphics2D.setStroke(new BasicStroke(3));
         hPos -= 20;
         graphics2D.drawLine(10, hPos, 10, hPos + 20);
         graphics2D.drawLine(10, hPos, 30, hPos);
         hPos += 20;
         graphics2D.setColor(textColor);
+        graphics2D.setFont(DPGenGUI.textFont);
         for (String line : article) {
             graphics2D.drawString(line, getAlignedTextPosition(line, 10, DPGenGUI.width - 10, DPGenGUI.textFont), hPos);
             hPos += 24;

@@ -6,7 +6,7 @@ public abstract class PictureBlock extends MaterialBlock {
     String description;
     int pictureHeight;
 
-    protected PictureBlock(Image picture, String description) {
+    PictureBlock(Image picture, String description) {
         super(DPGenGUI.style);
         this.picture = picture;
         this.description = description;

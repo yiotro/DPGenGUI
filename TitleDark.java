@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class TitleDark extends Title{
+class TitleDark extends Title{
 
     public TitleDark(String header) {
         super(header);

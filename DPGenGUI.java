@@ -1,7 +1,5 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 //import java.awt.*;
 import java.awt.*;
@@ -16,21 +14,19 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
 
     private static final long serialVersionUID = 1L;
-    MyButtonListener myButtonListener;
-    Random random;
-    JList elementList;
-    Vector<String> elements;
-    JLabel imageLabel;
-    JPanel mainCardPanel;
-    CardLayout mainCardLayout;
-    JTextField nameField;
-    JTextArea articleArea;
-    JTextField titleField;
-    JTextField imageTextField;
+    final JList elementList;
+    private final Vector<String> elements;
+    private final JLabel imageLabel;
+    final JPanel mainCardPanel;
+    final CardLayout mainCardLayout;
+    final JTextField nameField;
+    final JTextArea articleArea;
+    final JTextField titleField;
+    final JTextField imageTextField;
     public static final Color PICTURE_BLOCK_COLOR = new Color(50, 50, 50);
     public static final Color DEFAULT_BACKGROUND_COLOR = new Color(243, 243, 243);
     public static final Color DEFAULT_TEXT_COLOR = new Color(0, 0, 0);
-    public static final Color DEFAULT_COMMON_ARTICLE_COLOR = DEFAULT_BACKGROUND_COLOR;
+    private static final Color DEFAULT_COMMON_ARTICLE_COLOR = DEFAULT_BACKGROUND_COLOR;
     public static Color pictureBoundColor = new Color(0, 0, 0);
     static Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
     static Color textColor = new Color(0, 0, 0);
@@ -42,49 +38,46 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     static Font textFont;
     static Font commentFont;
     static Font headerFont;
-    static Font postNameFont;
+    private static Font postNameFont;
     static int lineSize = 59;
     static final int pictureDescriptionLineSize = 33;
     static final int width = 600;
     Vector<MaterialBlock> materialBlocks;
     String name;
-    int longPostSize;
-    BufferedImage result;
-    JLabel imageOnEditLabel;
+    private int longPostSize;
+    private BufferedImage result;
+    final JLabel imageOnEditLabel;
     Image currentImage;
     MaterialBlock selectedBlock;
     int selectedIndex;
-    JButton applyTitle;
-    JButton applyName;
-    JButton applyBackgroundColor;
-    JButton applyTextColor;
+    private final JButton applyTitle;
+    private final JButton applyName;
     Color commonArticleBackgroundColor;
-    static DPGenGUI singleGenGUI;
+    private static DPGenGUI singleGenGUI;
     Vector<String> signature;
     Color signatureColor;
-    JTextField signatureField;
-    JTextField textSizeField;
+    final JTextField signatureField;
+    final JTextField textSizeField;
     static Color thematicColor;
-    JPopupMenu popupMenu;
-    JMenuItem popupBackColorItem;
-    JMenuItem popupTextColorItem;
+    private final JPopupMenu popupMenu;
+    private final JMenuItem popupBackColorItem;
+    private final JMenuItem popupTextColorItem;
     static int style;
-    ElementFactory elementFactory;
-    JList styleSelectionList;
-    JButton applyArticle;
-    Vector<String> listOfStyles;
-    JMenu rotateMenu;
-    JMenu alignMenu;
+    final ElementFactory elementFactory;
+    final JList styleSelectionList;
+    final Vector<String> listOfStyles;
+    private final JMenu rotateMenu;
+    private final JMenu alignMenu;
 
-    DPGenGUI(String s){
-        super(s);
-        myButtonListener = new MyButtonListener(this);
+    private DPGenGUI(){
+        super("Генератор длиннопостов от yiotro ;)");
+        MyButtonListener myButtonListener = new MyButtonListener(this);
         MyListSelectionListener myListSelectionListener = new MyListSelectionListener(this);
         MyImageMouseListener imageMouseListener = new MyImageMouseListener(this);
         MyStyleSelectionListener styleSelectionListener = new MyStyleSelectionListener(this);
 
         elementFactory = new ElementFactory(ElementFactory.STYLE_ORIGINAL);
-        random = new Random();
+        Random random = new Random();
         setFont(new Font("Dialog", Font.PLAIN, 15));
         longPostSize = 1000;
         name = "";
@@ -274,28 +267,28 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         //options for post panel
         JPanel optionsPanel = new JPanel();
         optionsPanel.setLayout(null);
-        JLabel nameLabel = new JLabel("Название поста");
-        nameLabel.setBounds(5, 5, 150, 20);
+        JLabel nameLabel = new JLabel("Имя поста");
+        nameLabel.setBounds(5, 5, 80, 20);
         optionsPanel.add(nameLabel);
         nameField = new JTextField("", 20);
         nameField.setBounds(90, 5, 185, 25);
         nameField.setActionCommand("name");
         nameField.addActionListener(this);
         optionsPanel.add(nameField);
-        applyName = new JButton("Применить название");
+        applyName = new JButton("Применить имя");
         applyName.addActionListener(myButtonListener);
         applyName.setBounds(5, 30, 150, 25);
         optionsPanel.add(applyName);
-        JButton changeNameColor = new JButton("Цвет названия");
+        JButton changeNameColor = new JButton("Цвет имени");
         changeNameColor.addActionListener(myButtonListener);
         changeNameColor.setBounds(160, 30, 115, 25);
         optionsPanel.add(changeNameColor);
-        applyBackgroundColor = new JButton("Задать фон");
+        JButton applyBackgroundColor = new JButton("Задать фон");
         applyBackgroundColor.setActionCommand("apply post background color");
         applyBackgroundColor.addActionListener(myButtonListener);
         applyBackgroundColor.setBounds(5, 60, 115, 25);
         optionsPanel.add(applyBackgroundColor);
-        applyTextColor = new JButton("Задать цвет текста");
+        JButton applyTextColor = new JButton("Задать цвет текста");
         applyTextColor.setActionCommand("apply post text color");
         applyTextColor.addActionListener(myButtonListener);
         applyTextColor.setBounds(125, 60, 150, 25);
@@ -321,7 +314,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         setSignatureColorButton.addActionListener(myButtonListener);
         setSignatureColorButton.setBounds(150, 180, 125, 25);
         optionsPanel.add(setSignatureColorButton);
-        JButton applyTextSize = new JButton("Задать размер текста");
+        JButton applyTextSize = new JButton("Размер текста");
         applyTextSize.addActionListener(myButtonListener);
         applyTextSize.setBounds(5, 210, 150, 25);
         optionsPanel.add(applyTextSize);
@@ -334,6 +327,16 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         applyThematicColor.addActionListener(myButtonListener);
         applyThematicColor.setBounds(5, 240, 270, 25);
         optionsPanel.add(applyThematicColor);
+        JButton buttonChooseFont = new JButton("Выбрать шрифт");
+        buttonChooseFont.setActionCommand("choose font");
+        buttonChooseFont.addActionListener(myButtonListener);
+        buttonChooseFont.setBounds(5, 270, 120, 25);
+        optionsPanel.add(buttonChooseFont);
+        JButton buttonLoadFont = new JButton("Шрифт из файла");
+        buttonLoadFont.setActionCommand("load font");
+        buttonLoadFont.addActionListener(myButtonListener);
+        buttonLoadFont.setBounds(130, 270, 145, 25);
+        optionsPanel.add(buttonLoadFont);
         mainCardPanel.add(optionsPanel, "options");
 
         //edit article panel
@@ -348,7 +351,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         tempScrollPane.setBounds(5, 30, 270, 300);
         articleArea.setFont(c.getFont());
         editArticlePanel.add(tempScrollPane);
-        applyArticle = new JButton("Применить абзац");
+        JButton applyArticle = new JButton("Применить абзац");
         applyArticle.addActionListener(myButtonListener);
         applyArticle.setBounds(5, 335, 270, 25);
         editArticlePanel.add(applyArticle);
@@ -465,8 +468,8 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         DPGenGUI.singleGenGUI.signatureColor = backgroundColor.darker().darker();
     }
 
-    public void setStyle(int style) {
-        this.style = style;
+    void setStyle(int style) {
+        DPGenGUI.style = style;
         elementFactory.setStyle(style);
         Vector<MaterialBlock> copies = new Vector<MaterialBlock>();
         for (MaterialBlock materialBlock : materialBlocks) {
@@ -491,7 +494,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         setStyle(getStyleByName(nameOfStyle));
     }
 
-    public int getStyleByName(String nameOfStyle) {
+    int getStyleByName(String nameOfStyle) {
         if (nameOfStyle.equals(listOfStyles.get(0))) return ElementFactory.STYLE_ORIGINAL;
         else if (nameOfStyle.equals(listOfStyles.get(1))) return ElementFactory.STYLE_BASIC;
         else if (nameOfStyle.equals(listOfStyles.get(2))) return ElementFactory.STYLE_DARK;
@@ -525,7 +528,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     }
 
     public void setThematicColor(Color thematicColor) {
-        this.thematicColor = thematicColor;
+        DPGenGUI.thematicColor = thematicColor;
         pictureBoundColor = thematicColor;
     }
 
@@ -540,7 +543,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     }
 
     private static String generateStringByLength(int length) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for (int i=0; i<length; i++) buffer.append("e");
         return buffer.toString();
     }
@@ -573,7 +576,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     }
 
     public static void main(String args[]){
-        singleGenGUI = new DPGenGUI("Генератор длиннопостов от yiotro ;)");
+        singleGenGUI = new DPGenGUI();
         singleGenGUI.addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent ev){
                 singleGenGUI.askIfUserWantsToCloseProgram();
@@ -645,9 +648,6 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
 
     void loadPost() {
         JFileChooser chooser = new JFileChooser();
-//        FileFilter type1 = new FileNameExtensionFilter("Pikabu post", ".dat");
-//        chooser.setAcceptAllFileFilterUsed(false);
-//        chooser.addChoosableFileFilter(type1);
         int returnVal = chooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             refreshLineSize();
@@ -712,7 +712,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     }
 
     void compose(boolean reselect) {
-        int currentVerticalPos = 0;
+        int currentVerticalPos;
         longPostSize = getEstimatedPostHeight();
         result = new BufferedImage(width, longPostSize, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = (Graphics2D) result.getGraphics();
@@ -723,9 +723,9 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         graphics.setStroke(new BasicStroke(3));
         graphics.setColor(Color.GRAY);
         graphics.drawRect(1, 1, width - 3, longPostSize - 3);
-        int namePos = width / 2 - 13 * name.toString().length();
+        int namePos = width / 2 - 13 * name.length();
         graphics.setColor(nameColor);
-        graphics.drawString(name.toString(), namePos, 70);
+        graphics.drawString(name, namePos, 70);
         graphics.setColor(textColor);
         graphics.setFont(textFont);
         currentVerticalPos = 150;
@@ -777,14 +777,36 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         return bImg;
     }
 
-    public void clearSelection() {
+    void setLoadedFont(Font font) {
+        if (font.getSize() < 12) font = font.deriveFont(12.0f);
+        GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        graphicsEnvironment.registerFont(font);
+        textFont = font;
+        headerFont = font.deriveFont(Font.BOLD, 28.0f);
+    }
+
+    void loadFontFromFile() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Внимание! При сохранении такой шрифт не сохраняется :(");
+        int returnVal = chooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            try {
+                Font font = Font.createFont(Font.TRUETYPE_FONT, chooser.getSelectedFile());
+                if (font != null) setLoadedFont(font);
+            } catch (Exception ignored) {
+                ignored.printStackTrace();
+            }
+        }
+    }
+
+    void clearSelection() {
         selectedBlock = null;
         selectedIndex = -1;
         elementList.clearSelection();
         mainCardLayout.show(mainCardPanel, "empty");
     }
 
-    public void reselectBlock() {
+    void reselectBlock() {
         elementList.clearSelection();
         elementList.setSelectedIndex(selectedIndex);
     }
@@ -858,16 +880,16 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     }
 
     public static String getStringFromStringVector(Vector<String> vector, boolean newLineSymbol) {
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuffer = new StringBuilder();
         for (String item : vector) {
             if (item.charAt(item.length()-1) == ' ') item = item.substring(0, item.length()-1);
-            if (newLineSymbol) stringBuffer.append(item + "\n");
+            if (newLineSymbol) stringBuffer.append(item).append("\n");
             else stringBuffer.append(item);
         }
         return stringBuffer.toString();
     }
 
-    public static String getStringFromStringVector(Vector<String> vector) {
+    private static String getStringFromStringVector(Vector<String> vector) {
         return getStringFromStringVector(vector, true);
     }
 
@@ -889,7 +911,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         compose();
     }
 
-    public Vector<PIBlock> getAsPiBlocks() {
+    Vector<PIBlock> getAsPiBlocks() {
         Vector<PIBlock> piBlocks = new Vector<PIBlock>();
         PIBlock block;
         for (MaterialBlock materialBlock : materialBlocks) {
@@ -919,9 +941,10 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         return piBlocks;
     }
 
-    public void setProjectByProjectInformation(ProjectInformation projectInformation) {
+    void setProjectByProjectInformation(ProjectInformation projectInformation) {
         name = projectInformation.projectName;
         style = projectInformation.style;
+        setLoadedFont(projectInformation.textFont);
         Vector<PIBlock> piBlocks = projectInformation.blocks;
         for (PIBlock block : piBlocks) {
             switch (block.type) {
@@ -951,7 +974,6 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         nameColor = projectInformation.nameColor;
         thematicColor = projectInformation.thematicColor;
         pictureBoundColor = thematicColor;
-        textFont = projectInformation.textFont;
         signature = projectInformation.sign;
         signatureField.setText(getStringFromStringVector(signature));
         compose();
@@ -969,7 +991,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         return answer;
     }
 
-    public void addElement(int index, MaterialBlock element) {
+    void addElement(int index, MaterialBlock element) {
         elementList.clearSelection();
         if (element instanceof PictureBlock) elements.add(index, "Картинка");
         if (element instanceof Article) elements.add(index, "Абзац");
@@ -997,10 +1019,11 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         return copy;
     }
 
-    public static Image getResizedImage(Image image, int wantedWidth, int wantedHeight, boolean forceScale) {
+    private static Image getResizedImage(Image image, int wantedWidth, int wantedHeight, boolean forceScale) {
         //this method restricts scaling up the picture if forceScale == true
         if (!forceScale && (wantedWidth > image.getWidth(null) || wantedHeight > image.getHeight(null))) return image;
-        BufferedImage resizedImage = new BufferedImage(wantedWidth, wantedWidth, BufferedImage.TYPE_INT_ARGB);
+
+        BufferedImage resizedImage = new BufferedImage(wantedWidth, wantedHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = resizedImage.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
@@ -1031,7 +1054,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         return getResizedImageByHeight(image, wantedHeight, false);
     }
 
-    public static Image getResizedImageByHeight(Image image, int wantedHeight, boolean forceScale) {
+    private static Image getResizedImageByHeight(Image image, int wantedHeight, boolean forceScale) {
         double k = ((double) image.getWidth(null)) / ((double) image.getHeight(null));
         int wantedWidth = (int) (k * wantedHeight);
         return getResizedImage(image, wantedWidth, wantedHeight, forceScale);

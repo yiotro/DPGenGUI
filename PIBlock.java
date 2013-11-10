@@ -3,7 +3,7 @@ import java.awt.*;
 import java.io.Serializable;
 import java.util.Vector;
 
-public class PIBlock implements Serializable {
+class PIBlock implements Serializable {
     Vector<String> text;
     ImageIcon imageIcon;
     int type;

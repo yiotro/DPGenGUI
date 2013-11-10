@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class TitleOriginal extends Title {
+class TitleOriginal extends Title {
 
     TitleOriginal(String header) {
         super(header);

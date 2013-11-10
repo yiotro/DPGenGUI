@@ -4,10 +4,10 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MyStyleSelectionListener implements ListSelectionListener, ActionListener {
+class MyStyleSelectionListener implements ListSelectionListener, ActionListener {
 
-    DPGenGUI genGUI;
-    boolean showedConfirmDialogOnce;
+    private final DPGenGUI genGUI;
+    private boolean showedConfirmDialogOnce;
 
     public MyStyleSelectionListener(DPGenGUI genGUI) {
         this.genGUI = genGUI;
@@ -21,7 +21,7 @@ public class MyStyleSelectionListener implements ListSelectionListener, ActionLi
             if (index < 0) return;
             int sure = JOptionPane.OK_OPTION;
             if (!showedConfirmDialogOnce) {
-                JOptionPane.showConfirmDialog(genGUI, "Выбранный стиль подействует на все элементы поста. Продолжить?", "Выбор стиля", JOptionPane.OK_CANCEL_OPTION);
+                sure = JOptionPane.showConfirmDialog(genGUI, "Выбранный стиль подействует на все элементы поста. Продолжить?", "Выбор стиля", JOptionPane.OK_CANCEL_OPTION);
                 showedConfirmDialogOnce = true;
             }
             if (sure != JOptionPane.OK_OPTION) {

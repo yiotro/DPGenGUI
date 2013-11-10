@@ -2,9 +2,9 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class MyListSelectionListener implements ListSelectionListener {
+class MyListSelectionListener implements ListSelectionListener {
 
-    DPGenGUI genGUI;
+    private final DPGenGUI genGUI;
 
     MyListSelectionListener(DPGenGUI genGUI) {
         this.genGUI = genGUI;

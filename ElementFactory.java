@@ -1,8 +1,8 @@
 import java.awt.*;
 import java.util.Vector;
 
-public class ElementFactory {
-    int style;
+class ElementFactory {
+    private int style;
     public static final int STYLE_ORIGINAL = 0;
     public static final int STYLE_BASIC = 1;
     public static final int STYLE_LONELY_LUCKILY = 2;
