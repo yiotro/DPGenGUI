@@ -12,7 +12,7 @@ public class TitleBasic extends Title{
         this.hPos = hPos;
         graphics2D.setFont(DPGenGUI.headerFont);
         graphics2D.setColor(textColor);
-        graphics2D.drawString(header, 25, hPos - 7);
+        graphics2D.drawString(header, getAlignedTextPosition(header, 25, DPGenGUI.width - 50, DPGenGUI.headerFont), hPos - 7);
         height = 45;
         return hPos + height;
     }

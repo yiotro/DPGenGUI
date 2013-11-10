@@ -74,6 +74,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     JButton applyArticle;
     Vector<String> listOfStyles;
     JMenu rotateMenu;
+    JMenu alignMenu;
 
     DPGenGUI(String s){
         super(s);
@@ -243,6 +244,21 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
             rotateMenu.add(item);
         }
         popupMenu.add(rotateMenu);
+        alignMenu = new JMenu("Выравнивание текста");
+        Vector<String> alignList = new Vector<String>();
+        Vector<String> alignCommandList = new Vector<String>();
+        alignList.add("Слева"); alignCommandList.add("align text left");
+        alignList.add("По центру"); alignCommandList.add("align text center");
+        alignList.add("Справа"); alignCommandList.add("align text right");
+        int k = 0;
+        for (String alignOption : alignList) {
+            JMenuItem item = new JMenuItem(alignOption);
+            item.setActionCommand(alignCommandList.get(k));
+            item.addActionListener(myButtonListener);
+            alignMenu.add(item);
+            k++;
+        }
+        popupMenu.add(alignMenu);
 
         //main card panel
         mainCardPanel = new JPanel();
@@ -670,11 +686,14 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
             popupBackColorItem.setEnabled(false);
             popupTextColorItem.setEnabled(false);
             rotateMenu.setEnabled(false);
+            alignMenu.setEnabled(false);
             if (selectedBlock instanceof Article) {
                 popupBackColorItem.setEnabled(true);
                 popupTextColorItem.setEnabled(true);
+                alignMenu.setEnabled(true);
             } else if (selectedBlock instanceof Title) {
                 popupTextColorItem.setEnabled(true);
+                alignMenu.setEnabled(true);
             } else if (selectedBlock instanceof PictureBlock) {
                 rotateMenu.setEnabled(true);
             }

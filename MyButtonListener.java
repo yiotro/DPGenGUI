@@ -228,6 +228,15 @@ public class MyButtonListener implements ActionListener {
                 ((Article) genGUI.selectedBlock).trimArticle();
                 genGUI.compose();
             }
+        } else if (command.equals("align text left")) {
+            genGUI.selectedBlock.setTextAlign(MaterialBlock.ALIGN_LEFT);
+            genGUI.compose();
+        } else if (command.equals("align text center")) {
+            genGUI.selectedBlock.setTextAlign(MaterialBlock.ALIGN_CENTER);
+            genGUI.compose();
+        } else if (command.equals("align text right")) {
+            genGUI.selectedBlock.setTextAlign(MaterialBlock.ALIGN_RIGHT);
+            genGUI.compose();
         }
     }
 }

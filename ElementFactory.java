@@ -68,18 +68,21 @@ public class ElementFactory {
             copy.setTextColor(((Article) element).textColor);
             copy.setBackgroundColor(((Article) element).backgroundColor);
             copy.style = requestedStyle;
+            copy.textAlign = element.textAlign;
             style = styleOfFactory;
             return copy;
         } else if (element instanceof Title) {
             Title copy = createTitle(((Title) element).header);
             copy.setTextColor(((Title) element).textColor);
             copy.style = requestedStyle;
+            copy.textAlign = element.textAlign;
             style = styleOfFactory;
             return copy;
         } else if (element instanceof PictureBlock) {
             PictureBlock copy = createPictureBlock(((PictureBlock) element).picture, ((PictureBlock) element).description);
             copy.style = requestedStyle;
             style = styleOfFactory;
+            copy.textAlign = element.textAlign;
             return copy;
         }
         // if fail

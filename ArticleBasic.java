@@ -21,7 +21,7 @@ public class ArticleBasic extends Article{
         graphics2D.setFont(DPGenGUI.textFont);
         graphics2D.setColor(textColor);
         for (String line : article) {
-            graphics2D.drawString(line, 15, hPos);
+            graphics2D.drawString(line, getAlignedTextPosition(line, 10, DPGenGUI.width - 10, DPGenGUI.textFont), hPos);
             hPos += 24;
         }
         hPos += 25;
