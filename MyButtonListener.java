@@ -184,10 +184,10 @@ class MyButtonListener implements ActionListener {
             StringBuilder help = new StringBuilder();
             help.append("Привет, это прога для создания длиннопостов на пикабу.\n");
             help.append("Сделал ее я, yiotro.\n");
-            help.append("В принципе прога довольно простая, кнопок хоть и много,\n");
-            help.append("но по ним легко понять что они делают.\n");
-            help.append("Надо заметить что на элементы поста можно кликать правой\n");
-            help.append("кнопкой мыши\n");
+            help.append("В принципе, прога довольно простая, кнопок хоть и много,\n");
+            help.append("но по ним легко понять, что они делают.\n");
+            help.append("Надо заметить, что на элементы поста можно кликать правой\n");
+            help.append("кнопкой мыши.\n");
             help.append("Особая благодарность моему другу faragilus за помощь :)\n");
             help.append("Мой e-mail: yiotro@hotmail.com");
             JOptionPane.showMessageDialog(genGUI, help.toString(), "Помощь", JOptionPane.INFORMATION_MESSAGE);

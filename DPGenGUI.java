@@ -71,6 +71,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     private ProjectInformation lastProjectCondition;
     private ProjectInformation currentProjectCondition;
     private static String OS = System.getProperty("os.name").toLowerCase();
+    private boolean madeChange;
 
     private DPGenGUI(){
         super("Генератор длиннопостов от yiotro ;)");
@@ -79,6 +80,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         MyImageMouseListener imageMouseListener = new MyImageMouseListener(this);
         MyStyleSelectionListener styleSelectionListener = new MyStyleSelectionListener(this);
 
+        madeChange = false;
         elementFactory = new ElementFactory(ElementFactory.STYLE_ORIGINAL);
         Random random = new Random();
         setFont(new Font("Dialog", Font.PLAIN, 15));
@@ -588,6 +590,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     }
 
     public void askIfUserWantsToCloseProgram() {
+        if (!madeChange) System.exit(0);
         Object[] options = {"Выйти", "Сохранить и выйти", "Отмена"};
         int n = JOptionPane.showOptionDialog(singleGenGUI, "Выйти без сохранения?", "", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
         switch (n) {
@@ -655,6 +658,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     }
 
     void memorizeCurrentProjectCondition() {
+        madeChange = true;
         copyProjectInformation(currentProjectCondition, lastProjectCondition);
         currentProjectCondition.blocks = getAsPiBlocks();
         currentProjectCondition.projectName = name;
@@ -682,6 +686,27 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     }
 
     void savePost() {
+        if (isMac()) {
+            FileDialog dialog = new FileDialog(this, "Сохранить файл", FileDialog.SAVE);
+            dialog.setFile("*.dat");
+            dialog.setVisible(true);
+            String fileName = dialog.getFile();
+            if (fileName == null) {
+                System.out.println("Error saving file");
+            } else {
+                try {
+                    madeChange = false;
+                    File file = new File(dialog.getDirectory() + fileName);
+                    ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(file));
+                    ProjectInformation projectInformation = new ProjectInformation(getAsPiBlocks(), name, backgroundColor, textColor,
+                            commonArticleBackgroundColor, nameColor, thematicColor, textFont, style, signature);
+                    stream.writeObject(projectInformation);
+                } catch (Exception ignored) {
+                    ignored.printStackTrace();
+                }
+            }
+            return;
+        }
         JFileChooser chooser = new JFileChooser(".");
         FileFilter type1 = new FileNameExtensionFilter("Pikabu post", ".dat");
         chooser.setAcceptAllFileFilterUsed(false);
@@ -689,6 +714,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         int returnVal = chooser.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             try {
+                madeChange = false;
                 File file = chooser.getSelectedFile();
                 ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(file));
                 ProjectInformation projectInformation = new ProjectInformation(getAsPiBlocks(), name, backgroundColor, textColor,
