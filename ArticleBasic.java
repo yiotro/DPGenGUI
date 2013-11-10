@@ -13,10 +13,10 @@ public class ArticleBasic extends Article{
     int show(Graphics2D graphics2D, int hPos) {
         this.hPos = hPos;
         graphics2D.setColor(backgroundColor);
-        graphics2D.fillRect(10, hPos - 20, DPGenGUI.width - 20, article.size() * 24);
+        graphics2D.fillRect(10, hPos - 20, DPGenGUI.width - 20, article.size() * 24 + 5);
         if (bordered) {
             graphics2D.setColor(Color.BLACK);
-            graphics2D.drawRect(10, hPos - 20, DPGenGUI.width - 20, article.size() * 24);
+            graphics2D.drawRect(10, hPos - 20, DPGenGUI.width - 20, article.size() * 24 + 5);
         }
         graphics2D.setFont(DPGenGUI.textFont);
         graphics2D.setColor(textColor);

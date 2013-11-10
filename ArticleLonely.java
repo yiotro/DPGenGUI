@@ -14,10 +14,10 @@ public class ArticleLonely extends Article{
         this.hPos = hPos;
         graphics2D.setColor(backgroundColor);
         int fontHeight = 22;
-        graphics2D.fillRect(10, hPos - 20, DPGenGUI.width - 20, article.size() * fontHeight);
+        graphics2D.fillRect(10, hPos - 20, DPGenGUI.width - 20, article.size() * fontHeight + 5);
         if (bordered) {
             graphics2D.setColor(Color.BLACK);
-            graphics2D.drawRect(10, hPos - 20, DPGenGUI.width - 20, article.size() * fontHeight);
+            graphics2D.drawRect(10, hPos - 20, DPGenGUI.width - 20, article.size() * fontHeight + 5);
         }
         graphics2D.setFont(DPGenGUI.textFont);
         graphics2D.setColor(textColor);
