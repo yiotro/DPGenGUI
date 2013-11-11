@@ -16,7 +16,7 @@ class TitleDark extends Title{
         int alignedPos = getAlignedTextPosition(header, 25, DPGenGUI.width - 50, DPGenGUI.headerFont);
         graphics2D.drawString(header, alignedPos, hPos - 7);
         graphics2D.setColor(DPGenGUI.thematicColor);
-        graphics2D.setStroke(new BasicStroke(3));
+        graphics2D.setStroke(new BasicStroke(2));
         FontMetrics metrics = graphics2D.getFontMetrics();
         graphics2D.drawLine(alignedPos + 5, hPos - 7 + 3, alignedPos + metrics.stringWidth(header), hPos - 7 + 3);
         height = 45;

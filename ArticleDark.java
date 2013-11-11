@@ -29,7 +29,7 @@ class ArticleDark extends Article{
             hPos += 24;
         }
         hPos += 25;
-        height = hPos - this.hPos - 25;
+        height = hPos - this.hPos - 25 + 4;
         if (height < 20) height += 24;
         return hPos;
     }

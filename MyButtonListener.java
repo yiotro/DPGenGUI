@@ -193,20 +193,7 @@ class MyButtonListener implements ActionListener {
             help.append("Мой e-mail: yiotro@hotmail.com");
             JOptionPane.showMessageDialog(genGUI, help.toString(), "Помощь", JOptionPane.INFORMATION_MESSAGE);
         } else if (command.equals("Добавить картинку из папки")) {
-            JFileChooser chooser = new JFileChooser(".");
-            int returnVal = chooser.showOpenDialog(genGUI);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                try {
-                    BufferedImage image = ImageIO.read(chooser.getSelectedFile());
-                    if (image == null) return;
-                    genGUI.currentImage = image;
-                    image = (BufferedImage) DPGenGUI.getResizedImageByWidth(genGUI.currentImage, 300);
-                    ImageIcon icon = new ImageIcon(image);
-                    genGUI.imageOnEditLabel.setIcon(icon);
-                } catch (Exception ignored) {
-                    ignored.printStackTrace();
-                }
-            }
+            genGUI.loadPictureFromFile();
         } else if (command.equals("По часовой")) {
             if (genGUI.selectedBlock instanceof PictureBlock) {
                 ((PictureBlock) genGUI.selectedBlock).picture = DPGenGUI.rotateImage(((PictureBlock) genGUI.selectedBlock).picture, 90);

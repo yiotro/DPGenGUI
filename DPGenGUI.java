@@ -498,7 +498,12 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         for (MaterialBlock materialBlock : materialBlocks) {
             copies.add(elementFactory.copyOfElement(materialBlock, style));
         }
-        clearPost(true);
+        materialBlocks = new Vector<MaterialBlock>();
+        elementList.clearSelection();
+        elementList.removeAll();
+        elementList.updateUI();
+        elements.removeAllElements();
+        clearSelection();
         Color backgroundArticleColor = elementFactory.getArticleBackgroundOfStyle();
         for (MaterialBlock copy : copies) {
             if (copy instanceof Article) ((Article) copy).setBackgroundColor(backgroundArticleColor);
@@ -642,6 +647,22 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
 
     void exportToPNG() {
         compose();
+        if (isMac()) {
+            FileDialog dialog = new FileDialog(this, "Экспорт", FileDialog.SAVE);
+            dialog.setVisible(true);
+            String fileName = dialog.getFile();
+            if (fileName == null) {
+                System.out.println("Error exporting file");
+            } else {
+                try {
+                    File file = new File(dialog.getDirectory() + fileName);
+                    ImageIO.write(result, "png", file);
+                } catch (Exception ignored) {
+                    ignored.printStackTrace();
+                }
+            }
+            return;
+        }
         JFileChooser chooser = new JFileChooser(".");
         FileFilter type1 = new FileNameExtensionFilter("Image file", ".png");
         chooser.setAcceptAllFileFilterUsed(false);
@@ -669,7 +690,8 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         currentProjectCondition.thematicColor = thematicColor;
         currentProjectCondition.textFont = textFont;
         currentProjectCondition.style = style;
-        currentProjectCondition.sign = signature;
+        currentProjectCondition.sign = new Vector<String>();
+        for (String line : signature) currentProjectCondition.sign.add(line);
     }
 
     private void copyProjectInformation(ProjectInformation src, ProjectInformation dst) {
@@ -725,6 +747,26 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     }
 
     void loadPost() {
+        if (isMac()) {
+            FileDialog dialog = new FileDialog(this, "Открыть файл", FileDialog.LOAD);
+            dialog.setVisible(true);
+            String fileName = dialog.getFile();
+            if (fileName == null) {
+                System.out.println("Error loading file");
+            } else {
+                try {
+                    File file = new File(dialog.getDirectory() + fileName);
+                    ObjectInputStream stream = new ObjectInputStream(new FileInputStream(file));
+                    ProjectInformation projectInformation = (ProjectInformation) stream.readObject();
+                    clearPost(true);
+                    setProjectByProjectInformation(projectInformation);
+                    madeChange = false;
+                } catch (Exception ignored) {
+                    ignored.printStackTrace();
+                }
+            }
+            return;
+        }
         JFileChooser chooser = new JFileChooser();
         int returnVal = chooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -804,9 +846,11 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         graphics.setFont(postNameFont);
         graphics.setColor(backgroundColor);
         graphics.fillRect(0, 0, width, longPostSize);
-        graphics.setStroke(new BasicStroke(3));
-        graphics.setColor(Color.GRAY);
-        graphics.drawRect(1, 1, width - 3, longPostSize - 3);
+        if (style == ElementFactory.STYLE_ORIGINAL) {
+            graphics.setStroke(new BasicStroke(3));
+            graphics.setColor(Color.GRAY);
+            graphics.drawRect(1, 1, width - 3, longPostSize - 3);
+        }
         FontMetrics metrics = graphics.getFontMetrics();
         int namePos = (int) ((width - metrics.stringWidth(name)) / 2.0f);
         if (namePos < 10) {
@@ -827,7 +871,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         graphics.setColor(signatureColor);
         graphics.setFont(textFont);
         metrics = graphics.getFontMetrics();
-        currentVerticalPos += 10;
+        currentVerticalPos = longPostSize - 5 - 24 * signature.size();
         int horizontalPosition;
         for (String line : signature) {
             int currentLineWidth = metrics.stringWidth(line);
@@ -876,7 +920,62 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         headerFont = font.deriveFont(Font.BOLD, 28.0f);
     }
 
+    void loadPictureFromFile() {
+        if (isMac()) {
+            FileDialog dialog = new FileDialog(this, "Загрузка картинки с файла", FileDialog.LOAD);
+            dialog.setVisible(true);
+            String fileName = dialog.getFile();
+            if (fileName == null) {
+                System.out.println("Error loading file");
+            } else {
+                try {
+                    File file = new File(dialog.getDirectory() + fileName);
+                    BufferedImage image = ImageIO.read(file);
+                    if (image == null) return;
+                    currentImage = image;
+                    image = (BufferedImage) DPGenGUI.getResizedImageByWidth(currentImage, 300);
+                    ImageIcon icon = new ImageIcon(image);
+                    imageOnEditLabel.setIcon(icon);
+                } catch (Exception ignored) {
+                    ignored.printStackTrace();
+                }
+            }
+            return;
+        }
+        JFileChooser chooser = new JFileChooser(".");
+        int returnVal = chooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            try {
+                BufferedImage image = ImageIO.read(chooser.getSelectedFile());
+                if (image == null) return;
+                currentImage = image;
+                image = (BufferedImage) DPGenGUI.getResizedImageByWidth(currentImage, 300);
+                ImageIcon icon = new ImageIcon(image);
+                imageOnEditLabel.setIcon(icon);
+            } catch (Exception ignored) {
+                ignored.printStackTrace();
+            }
+        }
+    }
+
     void loadFontFromFile() {
+        if (isMac()) {
+            FileDialog dialog = new FileDialog(this, "Внимание! При сохранении такой шрифт не сохраняется :(", FileDialog.LOAD);
+            dialog.setVisible(true);
+            String fileName = dialog.getFile();
+            if (fileName == null) {
+                System.out.println("Error loading file");
+            } else {
+                try {
+                    File file = new File(dialog.getDirectory() + fileName);
+                    Font font = Font.createFont(Font.TRUETYPE_FONT, file);
+                    if (font != null) setLoadedFont(font);
+                } catch (Exception ignored) {
+                    ignored.printStackTrace();
+                }
+            }
+            return;
+        }
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Внимание! При сохранении такой шрифт не сохраняется :(");
         int returnVal = chooser.showOpenDialog(this);
@@ -972,10 +1071,12 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
 
     public static String getStringFromStringVector(Vector<String> vector, boolean newLineSymbol) {
         StringBuilder stringBuffer = new StringBuilder();
+        String tempLine;
         for (String item : vector) {
-            if (item.charAt(item.length()-1) == ' ') item = item.substring(0, item.length()-1);
-            if (newLineSymbol) stringBuffer.append(item).append("\n");
-            else stringBuffer.append(item);
+            tempLine = item;
+            if (item.charAt(item.length()-1) == ' ') tempLine = item.substring(0, item.length()-1);
+            if (newLineSymbol) stringBuffer.append(tempLine).append("\n");
+            else stringBuffer.append(tempLine);
         }
         return stringBuffer.toString();
     }
@@ -1036,8 +1137,9 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         name = projectInformation.projectName;
         style = projectInformation.style;
         setLoadedFont(projectInformation.textFont);
-        Vector<PIBlock> piBlocks = projectInformation.blocks;
-        for (PIBlock block : piBlocks) {
+        Vector<String> bugFixSignature = projectInformation.sign;
+        //somehow projectInformation.sign becomes null after this loop
+        for (PIBlock block : projectInformation.blocks) {
             switch (block.type) {
                 case PIBlock.TYPE_ARTICLE:
                     Article article = elementFactory.createArticle(block.text, block.style);
@@ -1049,7 +1151,8 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
                 case PIBlock.TYPE_PICTURE:
                     String text = "";
                     if (block.text.size() > 0) text = block.text.firstElement();
-                    PictureBlock pictureBlock = elementFactory.createPictureBlock(block.imageIcon.getImage(), text, block.style);
+                    Image image = block.imageIcon.getImage();
+                    PictureBlock pictureBlock = elementFactory.createPictureBlock(image, text, block.style);
                     addElement(pictureBlock);
                     break;
                 case PIBlock.TYPE_TITLE:
@@ -1065,7 +1168,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         nameColor = projectInformation.nameColor;
         thematicColor = projectInformation.thematicColor;
         pictureBoundColor = thematicColor;
-        signature = projectInformation.sign;
+        signature = bugFixSignature;
         signatureField.setText(getStringFromStringVector(signature));
         compose();
     }
