@@ -18,10 +18,6 @@ class PictureBlockDarkStyle extends PictureBlock{
     PictureBlockDarkStyle(Image picture, String description) {
         super(picture, description);
         style = ElementFactory.STYLE_DARK;
-        LineCompacter compacter = new LineCompacter(DPGenGUI.pictureDescriptionLineSize);
-        compacter.setLongLine(description);
-        compacter.compact();
-        lines = compacter.getLines();
         if (picture.getWidth(null) > DPGenGUI.width - 70 || picture.getWidth(null) < MINIMUM_PICTURE_WIDTH) {
             if (picture.getWidth(null) > DPGenGUI.width - 70) blockWidth = DPGenGUI.width - 60;
             else blockWidth = MINIMUM_PICTURE_WIDTH;
@@ -34,6 +30,10 @@ class PictureBlockDarkStyle extends PictureBlock{
             blockWidth = picture.getWidth(null) + 10;
         }
         this.description = description;
+        LineCompacter compacter = new LineCompacter(DPGenGUI.howManySymbolsFitInWidth(this.picture.getWidth(null) - 20, DPGenGUI.commentFont));
+        compacter.setLongLine(description);
+        compacter.compact();
+        lines = compacter.getLines();
     }
 
     @Override
@@ -55,6 +55,6 @@ class PictureBlockDarkStyle extends PictureBlock{
 
     @Override
     Rectangle getSelectionRegion() {
-        return new Rectangle(DPGenGUI.width / 2 - blockWidth / 2 - 10, hPos - 30 - 10, picture.getWidth(null) + 20, picture.getHeight(null) + 20);
+        return new Rectangle(DPGenGUI.width / 2 - blockWidth / 2 - 10, hPos - 30 - 10, picture.getWidth(null) + 20, picture.getHeight(null) + 23 + 20 * lines.size());
     }
 }

@@ -14,4 +14,6 @@ class PIBlock implements Serializable {
     public static final int TYPE_PICTURE = 2;
     boolean bordered;
     int style;
+    int textAlign;
+    Vector<Integer> integers;
 }

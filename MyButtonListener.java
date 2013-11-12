@@ -85,8 +85,9 @@ class MyButtonListener implements ActionListener {
             if (genGUI.selectedBlock == null) return;
             if (!(genGUI.selectedBlock instanceof PictureBlock)) return;
             String text = genGUI.imageTextField.getText();
-            genGUI.materialBlocks.setElementAt(genGUI.elementFactory.createPictureBlock(genGUI.currentImage, text, genGUI.selectedBlock.style), genGUI.selectedIndex);
-            genGUI.selectedBlock.refreshHeight();
+            PictureBlock pictureBlock = genGUI.elementFactory.createPictureBlock(genGUI.currentImage, text, genGUI.selectedBlock.style);
+            pictureBlock.refreshHeight();
+            genGUI.materialBlocks.setElementAt(pictureBlock, genGUI.selectedIndex);
             genGUI.refreshLineSize();
             genGUI.compose();
         } else if (command.equals("Вставить")) {
@@ -187,7 +188,8 @@ class MyButtonListener implements ActionListener {
             help.append("В принципе, прога довольно простая, кнопок хоть и много,\n");
             help.append("но по ним легко понять, что они делают.\n");
             help.append("Надо заметить, что на элементы поста можно кликать правой\n");
-            help.append("кнопкой мыши.\n");
+            help.append("кнопкой мыши. И если текст вдруг вылез за пределы абзаца,\n");
+            help.append("то нажмите 'Схлопнуть абзац'\n");
             help.append("Хочу сказать спасибо пользователю Hexen за помощь\n");
             help.append("Особая благодарность моему другу faragilus за помощь :)\n");
             help.append("Мой e-mail: yiotro@hotmail.com");

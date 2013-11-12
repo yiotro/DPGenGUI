@@ -33,7 +33,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     public static final Color HEADER_COLOR = new Color(200, 200, 200);
     public static final int POST_NAME_MAX_SIZE = 22;
     public static final int TITLE_MAX_SIZE = 32;
-    public static final int PICTURE_COMMENT_MAX_SIZE = 60;
+    public static final int PICTURE_COMMENT_MAX_SIZE = 100;
     static Font textFont;
     static Font commentFont;
     static Font headerFont;
@@ -103,6 +103,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         listOfStyles.add("Dark style");
         listOfStyles.add("Lonely42Luckily");
         listOfStyles.add("Pictures only style");
+        listOfStyles.add("Line style");
 
         materialBlocks = new Vector<MaterialBlock>();
 
@@ -507,7 +508,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         Color backgroundArticleColor = elementFactory.getArticleBackgroundOfStyle();
         for (MaterialBlock copy : copies) {
             if (copy instanceof Article) ((Article) copy).setBackgroundColor(backgroundArticleColor);
-            addElement(copy);
+            addElement(copy, false);
         }
         setTextColor(elementFactory.getTextColorOfStyle());
         setBackgroundColor(elementFactory.getBackgroundColorOfStyle());
@@ -528,6 +529,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         else if (nameOfStyle.equals(listOfStyles.get(2))) return ElementFactory.STYLE_DARK;
         else if (nameOfStyle.equals(listOfStyles.get(3))) return ElementFactory.STYLE_LONELY_LUCKILY;
         else if (nameOfStyle.equals(listOfStyles.get(4))) return ElementFactory.STYLE_PICTURES_ONLY;
+        else if (nameOfStyle.equals(listOfStyles.get(5))) return ElementFactory.STYLE_LINES;
 
         //if bad name of style
         System.out.println("tried to get style by name but failed");
@@ -561,10 +563,50 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     }
 
     public void refreshLineSize() {
-        lineSize = howManySymbolsFitInWidth(width - 20, textFont);
+        String maximumText = "";
+        String currentText = "";
+        for (MaterialBlock materialBlock : materialBlocks) {
+            if (materialBlock instanceof Article) {
+                currentText = getStringFromStringVector(((Article) materialBlock).article, false);
+                if (currentText.length() > maximumText.length()) maximumText = currentText;
+            }
+        }
+        lineSize = howManySymbolsFitInWidth(DPGenGUI.width - 20, textFont, maximumText);
         for (MaterialBlock materialBlock : materialBlocks) {
             if (materialBlock instanceof Article) {
                 ((Article) materialBlock).refreshArticleLines();
+            }
+        }
+        //well, now lineSize can be too big, so we let's find biggest line and trim lineSize
+        String biggestLine = "";
+        Article articleWithBiggestLine = null;
+        for (MaterialBlock materialBlock : materialBlocks) {
+            if (materialBlock instanceof Article) {
+                for (String currentLine : ((Article) materialBlock).article) {
+                    if (currentLine.length() > biggestLine.length()) {
+                        biggestLine = currentLine;
+                        articleWithBiggestLine = (Article) materialBlock;
+                    }
+                }
+            }
+        }
+        //if null then let's just return from this method
+        if (articleWithBiggestLine == null) return;
+        //We have found biggest line, now let's trim
+        Article copyOfArticleWithBiggestLine = (Article) elementFactory.copyOfElement(articleWithBiggestLine);
+        Graphics graphics = result.getGraphics();
+        graphics.setFont(textFont);
+        FontMetrics metrics = graphics.getFontMetrics();
+        while (true) {
+            lineSize--;
+            copyOfArticleWithBiggestLine.trimArticle();
+            biggestLine = "";
+            for (String currentLine : copyOfArticleWithBiggestLine.article) {
+                if (currentLine.length() > biggestLine.length()) biggestLine = currentLine;
+            }
+            int currentWidth = metrics.stringWidth(biggestLine);
+            if (currentWidth < DPGenGUI.width - 20) {
+                break;
             }
         }
     }
@@ -577,9 +619,15 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         }
     }
 
-    private static String generateStringByLength(int length) {
+    private static String generateStringByLength(int length, String text) {
         StringBuilder buffer = new StringBuilder();
-        for (int i=0; i<length; i++) buffer.append("e");
+        if (length > text.length()) {
+            for (int i=0; i<length; i++) {
+                buffer.append("e");
+            }
+        } else {
+            buffer.append(text.substring(0, length));
+        }
         return buffer.toString();
     }
 
@@ -646,16 +694,19 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     }
 
     void exportToPNG() {
+        boolean mc = madeChange;
         compose();
+        madeChange = mc;
         if (isMac()) {
             FileDialog dialog = new FileDialog(this, "Экспорт", FileDialog.SAVE);
+            dialog.setFile("Оригинальное название");
             dialog.setVisible(true);
             String fileName = dialog.getFile();
             if (fileName == null) {
                 System.out.println("Error exporting file");
             } else {
                 try {
-                    File file = new File(dialog.getDirectory() + fileName);
+                    File file = new File(dialog.getDirectory() + fileName + ".png");
                     ImageIO.write(result, "png", file);
                 } catch (Exception ignored) {
                     ignored.printStackTrace();
@@ -711,7 +762,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     void savePost() {
         if (isMac()) {
             FileDialog dialog = new FileDialog(this, "Сохранить файл", FileDialog.SAVE);
-            dialog.setFile("*.dat");
+            dialog.setFile("Оригинальное название");
             dialog.setVisible(true);
             String fileName = dialog.getFile();
             if (fileName == null) {
@@ -719,7 +770,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
             } else {
                 try {
                     madeChange = false;
-                    File file = new File(dialog.getDirectory() + fileName);
+                    File file = new File(dialog.getDirectory() + fileName + ".dat");
                     ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(file));
                     ProjectInformation projectInformation = new ProjectInformation(getAsPiBlocks(), name, backgroundColor, textColor,
                             commonArticleBackgroundColor, nameColor, thematicColor, textFont, style, signature);
@@ -810,6 +861,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
             rotateMenu.setEnabled(false);
             alignMenu.setEnabled(false);
             borderItem.setEnabled(false);
+            borderItem.setState(false);
             if (selectedBlock instanceof Article) {
                 popupBackColorItem.setEnabled(true);
                 popupTextColorItem.setEnabled(true);
@@ -1108,6 +1160,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         PIBlock block;
         for (MaterialBlock materialBlock : materialBlocks) {
             block = new PIBlock();
+            block.textAlign = materialBlock.textAlign;
             if (materialBlock instanceof Article) {
                 block.type = PIBlock.TYPE_ARTICLE;
                 block.text = ((Article)materialBlock).article;
@@ -1146,6 +1199,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
                     article.setBackgroundColor(block.backColor);
                     article.setTextColor(block.textColor);
                     article.setBordered(block.bordered);
+                    article.textAlign = block.textAlign;
                     addElement(article);
                     break;
                 case PIBlock.TYPE_PICTURE:
@@ -1153,11 +1207,13 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
                     if (block.text.size() > 0) text = block.text.firstElement();
                     Image image = block.imageIcon.getImage();
                     PictureBlock pictureBlock = elementFactory.createPictureBlock(image, text, block.style);
+                    pictureBlock.textAlign = block.textAlign;
                     addElement(pictureBlock);
                     break;
                 case PIBlock.TYPE_TITLE:
                     Title header = elementFactory.createTitle(block.text.firstElement(), block.style);
                     header.setTextColor(block.textColor);
+                    header.textAlign = block.textAlign;
                     addElement(header);
                     break;
             }
@@ -1174,15 +1230,19 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     }
 
     public static int howManySymbolsFitInWidth(int width, Font font) {
+        return howManySymbolsFitInWidth(width, font, "");
+    }
+
+    public static int howManySymbolsFitInWidth(int width, Font font, String text) {
         BufferedImage bufferedImage = new BufferedImage(width, 200, BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = bufferedImage.getGraphics();
         graphics.setFont(font);
         FontMetrics metrics = graphics.getFontMetrics();
         int answer = 1;
-        while (metrics.stringWidth(generateStringByLength(answer)) < width) {
+        while (metrics.stringWidth(generateStringByLength(answer, text)) < width) {
             answer++;
         }
-        return answer;
+        return answer - 1;
     }
 
     void addElement(int index, MaterialBlock element) {
@@ -1195,7 +1255,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         compose();
     }
 
-    public void addElement(MaterialBlock element) {
+    public void addElement(MaterialBlock element, boolean reDraw) {
         elementList.clearSelection();
         if (element instanceof PictureBlock) elements.add("Картинка");
         if (element instanceof Article) elements.add("Абзац");
@@ -1203,7 +1263,11 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         elementList.setListData(elements);
         materialBlocks.add(element);
         element.refreshHeight();
-        compose();
+        if (reDraw) compose();
+    }
+
+    public void addElement(MaterialBlock element) {
+        addElement(element, true);
     }
 
     public static Image getCopyOfImage(Image src) {

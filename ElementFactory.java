@@ -8,6 +8,7 @@ class ElementFactory {
     public static final int STYLE_LONELY_LUCKILY = 2;
     public static final int STYLE_DARK = 3;
     public static final int STYLE_PICTURES_ONLY = 4;
+    public static final int STYLE_LINES = 5;
     public static final Color DEFAULT_DARK_STYLE_BACKGROUND_COLOR = new Color(100, 100, 100);
 
     public ElementFactory(int style) {
@@ -25,6 +26,7 @@ class ElementFactory {
             case STYLE_DARK: return new ArticleDark(article);
             case STYLE_LONELY_LUCKILY: return new ArticleLonely(article);
             case STYLE_PICTURES_ONLY: return new ArticleLonely(article);
+            case STYLE_LINES: return new ArticleLines(article);
             default: return new ArticleOriginal(article);
         }
     }
@@ -36,6 +38,7 @@ class ElementFactory {
             case STYLE_DARK: return new TitleDark(title);
             case STYLE_LONELY_LUCKILY: return new TitleLonely(title);
             case STYLE_PICTURES_ONLY: return new TitleBasic(title);
+            case STYLE_LINES: return new TitleLines(title);
             default: return new TitleOriginal(title);
         }
     }
@@ -50,6 +53,7 @@ class ElementFactory {
             case STYLE_DARK: return new PictureBlockDarkStyle(image, description);
             case STYLE_LONELY_LUCKILY: return new PictureBlockLonely(image, description);
             case STYLE_PICTURES_ONLY: return new PictureBlockPicturesOnly(image, description);
+            case STYLE_LINES: return new PictureBlockLines(image, description);
             default: return new PictureBlockOriginal(image, description);
         }
     }
@@ -120,6 +124,7 @@ class ElementFactory {
             case STYLE_DARK: return DEFAULT_DARK_STYLE_BACKGROUND_COLOR;
             case STYLE_LONELY_LUCKILY: return Color.WHITE;
             case STYLE_PICTURES_ONLY: return Color.WHITE;
+            case STYLE_LINES: return DPGenGUI.DEFAULT_BACKGROUND_COLOR;
             default: return DPGenGUI.DEFAULT_BACKGROUND_COLOR;
         }
     }
@@ -131,6 +136,7 @@ class ElementFactory {
             case STYLE_DARK: return new Color(230, 230, 230);
             case STYLE_LONELY_LUCKILY: return Color.BLACK;
             case STYLE_PICTURES_ONLY: return Color.BLACK;
+            case STYLE_LINES: return DPGenGUI.textColor;
             default: return DPGenGUI.DEFAULT_TEXT_COLOR;
         }
     }
@@ -142,6 +148,7 @@ class ElementFactory {
             case STYLE_DARK: return DEFAULT_DARK_STYLE_BACKGROUND_COLOR.brighter();
             case STYLE_LONELY_LUCKILY: return Color.WHITE;
             case STYLE_PICTURES_ONLY: return Color.WHITE;
+            case STYLE_LINES: return new Color(230, 230, 230);
             default: return DPGenGUI.DEFAULT_BACKGROUND_COLOR;
         }
     }
