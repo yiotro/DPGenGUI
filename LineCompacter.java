@@ -43,7 +43,7 @@ class LineCompacter {
         while (c < longLine.length() - 1) {
             while (c < longLine.length() - 1 && c - last < lineSize) c++;
             char ch = longLine.charAt(c);
-            while (c != longLine.length() - 1 && c >= 0 && ch != ' ' && ch != '.' && ch != '!' && ch != '?') {
+            while (c != longLine.length() - 1 && c > 0 && ch != ' ' && ch != '.' && ch != '!' && ch != '?') {
                 c--;
                 ch = longLine.charAt(c);
             }

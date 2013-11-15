@@ -577,13 +577,47 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
                 ((Article) materialBlock).refreshArticleLines();
             }
         }
-        //well, now lineSize can be too big, so we let's find biggest line and trim lineSize
+        if (result == null) return;
+        while (findBiggestLineLengthInPixels() > width - 20) {
+            trimLineSizeIteration();
+            for (MaterialBlock materialBlock : materialBlocks) {
+                if (materialBlock instanceof Article)
+                    ((Article) materialBlock).trimArticle();
+            }
+        }
+    }
+
+    int findBiggestLineLengthInPixels() {
+        if (result == null) return 0;
+        Graphics graphics = result.getGraphics();
+        graphics.setFont(textFont);
+        FontMetrics metrics = graphics.getFontMetrics();
+        String biggestLine = "";
+        int biggestWidth = 0;
+        for (MaterialBlock materialBlock : materialBlocks) {
+            if (materialBlock instanceof Article) {
+                for (String currentLine : ((Article) materialBlock).article) {
+                    if (metrics.stringWidth(currentLine) > metrics.stringWidth(biggestLine)) {
+                        biggestLine = currentLine;
+                        biggestWidth = metrics.stringWidth(currentLine);
+                    }
+                }
+            }
+        }
+        return biggestWidth;
+    }
+
+    void trimLineSizeIteration() {
+        // lineSize can be too big, so we let's find biggest line and trim lineSize
+        Graphics graphics = result.getGraphics();
+        graphics.setFont(textFont);
+        FontMetrics metrics = graphics.getFontMetrics();
         String biggestLine = "";
         Article articleWithBiggestLine = null;
         for (MaterialBlock materialBlock : materialBlocks) {
             if (materialBlock instanceof Article) {
                 for (String currentLine : ((Article) materialBlock).article) {
-                    if (currentLine.length() > biggestLine.length()) {
+                    if (metrics.stringWidth(currentLine) > metrics.stringWidth(biggestLine)) {
                         biggestLine = currentLine;
                         articleWithBiggestLine = (Article) materialBlock;
                     }
@@ -594,9 +628,6 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         if (articleWithBiggestLine == null) return;
         //We have found biggest line, now let's trim
         Article copyOfArticleWithBiggestLine = (Article) elementFactory.copyOfElement(articleWithBiggestLine);
-        Graphics graphics = result.getGraphics();
-        graphics.setFont(textFont);
-        FontMetrics metrics = graphics.getFontMetrics();
         while (true) {
             lineSize--;
             copyOfArticleWithBiggestLine.trimArticle();
