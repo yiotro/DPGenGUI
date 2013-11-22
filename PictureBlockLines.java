@@ -36,13 +36,13 @@ class PictureBlockLines extends PictureBlock {
         blockWidth = picture.getWidth(null);
         hPos += 10;
         Random random = new Random();
-        graphics2D.setColor(Color.BLACK);
+        graphics2D.setColor(DPGenGUI.pictureBoundColor);
         graphics2D.setStroke(new BasicStroke(3));
         int leftCorner = DPGenGUI.width / 2 - blockWidth / 2 - 1;
         int lowerCorner = hPos - 30 - 1;
         int rightCorner = leftCorner + picture.getWidth(null) + 1;
         int upperCorner = lowerCorner + picture.getHeight(null) + 1;
-        int lineLength = picture.getWidth(null) / 8;
+        int lineLength = picture.getWidth(null) / 16;
         graphics2D.drawLine(leftCorner, lowerCorner, leftCorner + lineLength, lowerCorner);
         graphics2D.drawLine(leftCorner, lowerCorner, leftCorner, lowerCorner + lineLength);
         graphics2D.drawLine(rightCorner, lowerCorner, rightCorner - lineLength, lowerCorner);

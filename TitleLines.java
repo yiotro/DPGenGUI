@@ -18,8 +18,8 @@ public class TitleLines extends Title{
         graphics2D.setStroke(new BasicStroke(2));
         FontMetrics metrics = graphics2D.getFontMetrics();
         int lineHeight = metrics.getHeight() / 3;
-        graphics2D.drawLine(12, hPos - 7 + 3 - lineHeight, alignedPos, hPos - 7 + 3 - lineHeight);
-        graphics2D.drawLine(alignedPos + metrics.stringWidth(header) + 5, hPos - 7 + 3 - lineHeight, DPGenGUI.width - 12, hPos - 7 + 3 - lineHeight);
+        graphics2D.drawLine(12, hPos - 7 + 3 - lineHeight, alignedPos - 5, hPos - 7 + 3 - lineHeight);
+        graphics2D.drawLine(alignedPos + metrics.stringWidth(header) + 10, hPos - 7 + 3 - lineHeight, DPGenGUI.width - 12, hPos - 7 + 3 - lineHeight);
         height = 45;
         return hPos + height;
     }

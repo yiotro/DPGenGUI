@@ -72,6 +72,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     private ProjectInformation currentProjectCondition;
     private static String OS = System.getProperty("os.name").toLowerCase();
     private boolean madeChange;
+    final int textArticleWidth = width - 20;
 
     private DPGenGUI(){
         super("Генератор длиннопостов от yiotro ;)");
@@ -563,6 +564,35 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
     }
 
     public void refreshLineSize() {
+        BufferedImage bufferedImage = new BufferedImage(width, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics = (Graphics2D) bufferedImage.getGraphics();
+        graphics.setFont(textFont);
+        FontMetrics metrics = graphics.getFontMetrics();
+        String biggestLine = "";
+        Article articleWithBiggestLine = null;
+        for (MaterialBlock materialBlock : materialBlocks) {
+            if (materialBlock instanceof Article) {
+                for (String currentLine : ((Article) materialBlock).article) {
+                    if (metrics.stringWidth(currentLine) > metrics.stringWidth(biggestLine)) {
+                        biggestLine = currentLine;
+                        articleWithBiggestLine = (Article) materialBlock;
+                    }
+                }
+            }
+        }
+        if (articleWithBiggestLine == null) {
+            lineSize = howManySymbolsFitInWidth(textArticleWidth, textFont, "");
+        } else {
+            lineSize = biggestLine.length();
+        }
+        String subBiggestLine = biggestLine;
+        while (metrics.stringWidth(subBiggestLine) > textArticleWidth) {
+            lineSize--;
+            subBiggestLine = biggestLine.substring(0, Math.min(lineSize - 1, biggestLine.length()));
+        }
+    }
+
+    public void refreshLineSizeOldAndBuggy() {
         String maximumText = "";
         String currentText = "";
         for (MaterialBlock materialBlock : materialBlocks) {
@@ -571,7 +601,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
                 if (currentText.length() > maximumText.length()) maximumText = currentText;
             }
         }
-        lineSize = howManySymbolsFitInWidth(DPGenGUI.width - 20, textFont, maximumText);
+        lineSize = howManySymbolsFitInWidth(textArticleWidth, textFont, maximumText);
         for (MaterialBlock materialBlock : materialBlocks) {
             if (materialBlock instanceof Article) {
                 ((Article) materialBlock).refreshArticleLines();
@@ -626,6 +656,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         }
         //if null then let's just return from this method
         if (articleWithBiggestLine == null) return;
+        System.out.println(biggestLine);
         //We have found biggest line, now let's trim
         Article copyOfArticleWithBiggestLine = (Article) elementFactory.copyOfElement(articleWithBiggestLine);
         while (true) {
@@ -636,7 +667,7 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
                 if (currentLine.length() > biggestLine.length()) biggestLine = currentLine;
             }
             int currentWidth = metrics.stringWidth(biggestLine);
-            if (currentWidth < DPGenGUI.width - 20) {
+            if (currentWidth < textArticleWidth) {
                 break;
             }
         }
@@ -808,6 +839,8 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
                     stream.writeObject(projectInformation);
                 } catch (Exception ignored) {
                     ignored.printStackTrace();
+                } finally {
+                    return;
                 }
             }
             return;
@@ -1257,7 +1290,9 @@ public class DPGenGUI extends JFrame implements ClipboardOwner, ActionListener {
         pictureBoundColor = thematicColor;
         signature = bugFixSignature;
         signatureField.setText(getStringFromStringVector(signature));
-        compose();
+        compose(false);
+        refreshLineSize();
+        compose(false);
     }
 
     public static int howManySymbolsFitInWidth(int width, Font font) {

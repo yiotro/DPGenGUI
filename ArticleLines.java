@@ -21,9 +21,9 @@ public class ArticleLines extends Article{
         }
         graphics2D.setColor(DPGenGUI.pictureBoundColor);
         graphics2D.setStroke(new BasicStroke(2));
-        int horizontalLineWidth = DPGenGUI.width / 3 - 10;
-        graphics2D.drawLine(9, hPos - 21, 9, hPos);
-        graphics2D.drawLine(9, hPos - 21, horizontalLineWidth, hPos - 21);
+        int horizontalLineWidth = 21;
+//        graphics2D.drawLine(9, hPos - 21, 9, hPos);
+//        graphics2D.drawLine(9, hPos - 21, 9 + horizontalLineWidth, hPos - 21);
         int farCornerX = DPGenGUI.width - 9;
         int farCornerY = hPos - 17 + article.size() * 24;
         graphics2D.drawLine(farCornerX, farCornerY, farCornerX, farCornerY - 20);
